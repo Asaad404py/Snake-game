@@ -114,17 +114,6 @@ class snake(object):
             else:
                 c.draw(surface)
 
-
-def drawGrid(width,rows,surface):
-    '''sizeBtw= width//rows
-    x,y = 0,0
-    for i in range(rows):
-        x += sizeBtw
-        y += sizeBtw
-
-        pygame.draw.line(surface, (255,255,255),(x,0),(x,width))
-        pygame.draw.line(surface, (255, 255, 255), (0,y), (width,y))'''
-
 def redrawWindow(surface):
     global rows, width, snake, snack, walls
     surface.fill((0,0,0))
@@ -136,7 +125,6 @@ def redrawWindow(surface):
     surface.blit(label, (350, 3))
     for wall in walls:
         wall.draw(surface)
-    drawGrid(width,rows,surface)
     pygame.display.update()
 
 def randomSnack(rows, item, wallpos):
@@ -268,7 +256,7 @@ def main():
             s.addCube()
             snack = cube(randomSnack(rows,s,wallpos), color=(0,255,0))
 
-        if len(s.body) == winning_score:
+        if len(s.body) == winning_score and level !=6:
             levelChk = True
             if level<6:
                 level += 1
@@ -278,14 +266,11 @@ def main():
 
         for x in range(len(s.body)):
             if (s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:]))) or s.body[x].pos in wallpos:
-                print(f'Score {len(s.body)-1+(level-1)*winning_score}')
-                message_box('The Snake Died','You have been degraded to previous level')
+                message_box('The Snake Died',f'You\'r score was {len(s.body)-1+(level-1)*winning_score}. Now you have been degraded to previous level')
                 if level>1:
                     level -= 1
                 s.reset((1,1),win)
                 levelChk = True
                 break
-
         redrawWindow(win)
-
 main()
